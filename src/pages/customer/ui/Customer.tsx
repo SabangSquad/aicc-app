@@ -3,9 +3,10 @@ import { MessageSquare, Bot, PhoneCall, ChevronRight } from 'lucide-react-native
 import { useNavigation } from '@react-navigation/native';
 import { Layout } from '@/shared/ui/Layout';
 import { Header } from '@/widgets/header/ui/Header';
+import { NavigationType } from '@/shared/types/navigationType';
 
 export function Customer() {
-    const navigation = useNavigation();
+    const navigation = useNavigation<NavigationType>();
 
     const faqList = [
         { id: 1, question: '주문 내역은 어디서 확인하나요?' },
@@ -40,14 +41,14 @@ export function Customer() {
                 <View className="mb-6 flex-row justify-between">
                     <TouchableOpacity
                         className="mx-1 flex-1 items-center rounded-2xl bg-neutral-800 p-4"
-                        onPress={() => navigation.navigate('Chatbot')}>
+                        onPress={() => navigation.navigate('chat-bot')}>
                         <Bot color="white" size={28} />
                         <Text className="mt-2 font-semibold text-white">챗봇 상담</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         className="mx-1 flex-1 items-center rounded-2xl bg-neutral-800 p-4"
-                        onPress={() => navigation.navigate('VoiceBot')}>
+                        onPress={() => navigation.navigate('voice-bot')}>
                         <PhoneCall color="white" size={28} />
                         <Text className="mt-2 font-semibold text-white">보이스봇 상담</Text>
                     </TouchableOpacity>
