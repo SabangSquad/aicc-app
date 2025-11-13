@@ -163,6 +163,7 @@ export const GLOrb: React.FC<GLOrbProps> = ({ listening, onToggleListening, size
     const hoverRef = useRef<number>(0);
     const rotRef = useRef<number>(0);
     const timeRef = useRef<number>(0);
+    let hoverCurrent = 0; // <-- 부드러운 보간용
     const glRef = useRef<any>(null);
     const rafRef = useRef<number | null>(null);
 
@@ -229,6 +230,9 @@ export const GLOrb: React.FC<GLOrbProps> = ({ listening, onToggleListening, size
 
         const start = Date.now();
         const startRef = { current: start } as any;
+        function lerp(a: number, b: number, t: number) {
+            return a + (b - a) * t;
+        }
 
         function render() {
             const now = Date.now();
@@ -242,11 +246,13 @@ export const GLOrb: React.FC<GLOrbProps> = ({ listening, onToggleListening, size
             gl.uniform2f(iResolutionLoc, width, height);
             gl.uniform1f(hueLoc, hue);
 
-            const hv = hoverRef.current;
+            const targetHover = hoverRef.current;
+            hoverCurrent = lerp(hoverCurrent, targetHover, 0.05);
+            gl.uniform1f(hoverLoc, hoverCurrent);
+
             const targetRotSpeed = listening ? 0.9 : 0.2;
             rotRef.current += 0.016 * targetRotSpeed;
 
-            gl.uniform1f(hoverLoc, hv);
             gl.uniform1f(rotLoc, rotRef.current);
             gl.uniform1f(hoverIntensityLoc, hoverIntensity);
 
@@ -257,7 +263,7 @@ export const GLOrb: React.FC<GLOrbProps> = ({ listening, onToggleListening, size
 
             try {
                 gl.endFrameEXP();
-            } catch (e) {}
+            } catch (_e) {}
 
             rafRef.current = requestAnimationFrame(render);
         }
@@ -269,14 +275,14 @@ export const GLOrb: React.FC<GLOrbProps> = ({ listening, onToggleListening, size
         <View {...pan.panHandlers} style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
             <GLView style={{ width: size, height: size }} onContextCreate={onContextCreate} />
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 onPress={onToggleListening}
                 className="rouned-full absolute"
                 style={{
                     width: size * 0.66,
                     height: size * 0.66,
                 }}
-            />
+            /> */}
         </View>
     );
 };

@@ -54,10 +54,15 @@ export function VoiceBot({ navigation }: VoiceBotPageProps) {
                 </View>
             </View>
             <View className="flex flex-1 items-center justify-center">
-                <GLOrb listening={listening} onToggleListening={() => (listening ? stopListening() : startListening())} hue={300} />
+                <GLOrb
+                    listening={listening}
+                    onToggleListening={() => (listening ? stopListening() : startListening())}
+                    hue={300}
+                    hoverIntensity={0.8}
+                />
 
                 <View className="mt-6">
-                    <Text style={{ color: '#cbd5e1' }}>{listening ? 'Listening...' : 'Tap to speak'}</Text>
+                    <Text style={{ color: '#cbd5e1' }}>{'Listening...'}</Text>
                 </View>
             </View>
         </View>
